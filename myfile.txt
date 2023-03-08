@@ -1,0 +1,13 @@
+
+
+# scheme/query lists should be required
+
+Schemes:
+	bob(A,B)
+Facts:
+	
+Rules:
+
+Queries:
+
+
