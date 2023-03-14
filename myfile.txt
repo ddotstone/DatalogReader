@@ -13,5 +13,3 @@ Queries:
   SK(X,X)?
   SK(X,Y)?
   SK('c','c')?
-
-
