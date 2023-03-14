@@ -10,6 +10,7 @@
 class Tuple:public std::vector<std::string>{
 private:
 public:
+	Tuple() {}
 	Tuple(std::vector<std::string> names):std::vector<std::string>(names){};
 	std::string toString(const Scheme& scheme) const{
 		if (scheme.size() ==0){

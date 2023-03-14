@@ -22,6 +22,10 @@ public:
     return;
   }
 
+  DatalogProgram getDatalogProgram() {
+      return dataStructure;
+  }
+
   TokenType tokenType() { return tokens.at(0).getType(); }
 
   std::string tokenValue() { return tokens.at(0).getValue(); }

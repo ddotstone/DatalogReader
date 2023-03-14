@@ -21,6 +21,13 @@ class Predicate{
 			this->name = name;
 			return;
 		}
+		std::string getName() {
+			return this->name;
+		}
+
+		std::vector<Parameter> getParameters() {
+			return this->parameters;
+		}
 
 		std::string toString(){
 			std::stringstream s;

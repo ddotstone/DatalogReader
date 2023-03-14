@@ -14,7 +14,7 @@ private:
   std::vector<Predicate> facts;
   std::vector<Rule> rules;
   std::vector<Predicate> queries;
-	std::set<std::string> domains;
+  std::set<std::string> domains;
 
 public:
   DatalogProgram() {
@@ -76,4 +76,15 @@ public:
 		domains.insert(temp);
 		return;
 	}
+	std::vector<Predicate> getSchemes() const{
+		return this->schemes;
+	};
+	std::vector<Predicate> getFacts() const{
+		return this->facts;
+	};
+	std::vector<Predicate> getQueries() const{
+		return this->queries;
+	};
+
+
 };

@@ -7,7 +7,9 @@ class Parameter{
 		std::string value;
 	public:
 		Parameter(const std::string value): value(value){}
-
+		std::string getValue() {
+			return value;
+		}
 		std::string toString(){
 			return value;
 		}
