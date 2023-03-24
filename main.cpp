@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
 
-  std::ifstream outputFile(argv[1]);
+  /*std::ifstream outputFile(argv[1]);
 
   if (outputFile.is_open()) {
     std::stringstream text;
@@ -40,7 +40,28 @@ int main(int argc, char *argv[]) {
 
   } else {
     std::cout << "Could not open file" << std::endl;
-  }
+  }*/
+	 Relation studentRelation("students", Scheme( {"ID", "Name", "Major"} ));
+
+  std::vector<std::string> studentValues[] = {
+    {"'42'", "'Ann'", "'CS'"},
+    {"'64'", "'Ned'", "'EE'"},
+  };
+
+  for (auto& value : studentValues)
+    studentRelation.addTuple(Tuple(value));
+
+	Relation courseRelation("courses", Scheme( {"ID", "Course"} ));
+
+  std::vector<std::string> courseValues[] = {
+    {"'42'", "'CS 100'"},
+    {"'32'", "'CS 232'"},
+  };
+
+  for (auto& value : courseValues)
+    courseRelation.addTuple(Tuple(value));
+
+  studentRelation.join(courseRelation);
 }
 
 

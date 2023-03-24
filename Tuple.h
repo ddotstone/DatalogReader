@@ -24,9 +24,8 @@ public:
 			s<<tuple.at(i);
 			s<<", ";
 			}
-		s.seekp(-2,s.cur);
-		s<<'\0'<<'\0';
-		return s.str();
+		
+		return s.str().substr(0,s.str().size()-2);
 		}
 
 };
