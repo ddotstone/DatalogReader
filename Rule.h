@@ -34,4 +34,12 @@ public:
 		s<<".";
 		return s.str();
   }
+
+  std::vector<Predicate> getPredicates() {
+      return this->predicates;
+  }
+
+  std::string getName() {
+      return this->name.getName();
+  }
 };

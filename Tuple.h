@@ -27,5 +27,12 @@ public:
 		
 		return s.str().substr(0,s.str().size()-2);
 		}
+	std::string toString() {
+		std::stringstream s;
+		for (auto& val : *this) {
+			s << val << " ";
+		}
+		return s.str();
+	}
 
 };

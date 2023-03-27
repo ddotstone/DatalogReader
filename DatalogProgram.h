@@ -85,6 +85,9 @@ public:
 	std::vector<Predicate> getQueries() const{
 		return this->queries;
 	};
+	std::vector<Rule> getRules() const {
+		return this->rules;
+	}
 
 
 };

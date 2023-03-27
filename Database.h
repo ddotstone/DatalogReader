@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include<bits/stdc++.h>
+#include <algorithm>
+#include <cctype>
 
 #include "Relation.h"
 #include "DatalogProgram.h"
@@ -29,10 +32,99 @@ public:
 		for (auto& i : datalog.getFacts()) {
 			relations[i.getName()].addTuple(conToString(i.getParameters()));
 		}
-		
+		processRules(datalog);
 		processQueries(datalog);
 		
 	}
+
+	
+	void processRules(DatalogProgram datalog) {
+		std::vector<std::string> values;
+		std::vector<int> indexes;
+		std::vector<int> var_indexes;
+		std::vector<Relation> rules;
+		std::set<std::string> vars;
+		std::unordered_map<std::string, int> scheme_location;
+		unsigned int k;
+		Relation temp;
+		Relation temp2;
+		bool any_added = true;
+		
+		while (any_added) {
+			for (auto& rule : datalog.getRules()) {
+				rules.clear();
+				for (auto& predicate : rule.getPredicates()) {
+					values = conToString(predicate.getParameters());
+					indexes.clear();
+					for (unsigned int i = 0; i < values.size(); i++) {
+						if (values.at(i)[0] == '\'') {
+							indexes.push_back(i);
+						}
+					}
+					temp = relations[predicate.getName()].select(indexes, values);
+					k = 0;
+					var_indexes.clear();
+					vars.clear();
+					for (unsigned int i = 0; i < values.size(); i++) {
+						if (k < indexes.size() && (int)i == indexes.at(k)) {
+							k++;
+							continue;
+						}
+						if (vars.find(values.at(i)) == vars.end()) {
+							var_indexes.push_back(i);
+							vars.insert(values.at(i));
+						}
+					}
+					temp2 = temp.project(var_indexes);
+					std::vector<std::string> variables;
+					for (auto& val : var_indexes) {
+						variables.push_back(values.at(val));
+
+					}
+					var_indexes.clear();
+					for (unsigned int i = 0; i < variables.size();i++) {
+						var_indexes.push_back(i);
+					}
+					temp2 = temp2.rename(var_indexes, variables);
+					rules.push_back(temp2);
+				}
+				temp2 = rules.at(0);
+
+				if (rules.size() > 0) {
+					for (unsigned int i = 1; i < rules.size();i++) {
+						temp2 = temp2.join(rules.at(i));
+					}
+				}
+				std::cout << temp2.toString() << "\n";
+				values.clear();
+				values = temp2.getScheme();
+				for (unsigned int i = 0; i < values.size(); i++) {
+					std::string value = values.at(i);
+					transform(value.begin(), value.end(), value.begin(), ::toupper);
+					scheme_location[values.at(i)] = i;
+				}
+				indexes.clear();
+				for (auto& val : relations[rule.getName()].getScheme()) {
+					indexes.push_back(scheme_location[val]);
+				}
+				var_indexes.clear();
+				for (unsigned int i;i < relations[rule.getName()].getScheme().size();i++) {
+					var_indexes.push_back(i);
+				}
+				temp2 = temp2.project(indexes);
+				std::vector<std::string> new_ref = relations[rule.getName()].getScheme();
+				for (auto& val : new_ref) {
+					std::cout << val << "\n";
+				}
+				temp2 = temp2.rename(var_indexes,new_ref);
+				
+				any_added = relations[rule.getName()].unions(temp2);
+				
+				
+			}
+		}
+	}
+
 	
 	void processQueries(DatalogProgram datalog) {
 		std::vector<std::string> values;
