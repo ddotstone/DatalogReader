@@ -38,7 +38,9 @@ public:
   std::vector<Predicate> getPredicates() {
       return this->predicates;
   }
-
+Predicate getPredicate(){
+	return this->name;
+}
   std::string getName() {
       return this->name.getName();
   }

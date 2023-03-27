@@ -39,7 +39,7 @@ public:
 
 	
 	void processRules(DatalogProgram datalog) {
-		std::cout << "Rule Evaluation" << "\n";
+		std::cout << "Rule Evaluation"<< "\n";
 		std::vector<std::string> values;
 		std::vector<int> indexes;
 		std::vector<int> var_indexes;
@@ -50,9 +50,11 @@ public:
 		Relation temp;
 		Relation temp2;
 		bool any_added = true;
+		bool continue_loop = true;
 		int passes = 0;
-		while (any_added) {
+		while (continue_loop && (datalog.getRules().size() > 0 || passes ==0)) {
 			passes += 1;
+			continue_loop = false;
 			for (auto& rule : datalog.getRules()) {
 				std::cout << rule.toString() << "\n";
 				rules.clear();
@@ -95,37 +97,34 @@ public:
 				temp2 = rules.at(0);
 				if (rules.size() > 0) {
 					for (unsigned int i = 1; i < rules.size();i++) {
-						
 						temp2 = temp2.join(rules.at(i));
 					}
 				}
 
 				values.clear();
 				values = temp2.getScheme();
+				if (temp2.getTuple().size() != 0){
+				}
 				for (unsigned int i = 0; i < values.size(); i++) {
 					std::string value = values.at(i);
-					transform(value.begin(), value.end(), value.begin(), ::toupper);
 					scheme_location[value] = i;
 				}
 				indexes.clear();
-				for (auto& val : relations[rule.getName()].getScheme()) {
+				for (auto& val : conToString(rule.getPredicate().getParameters())) {
 					indexes.push_back(scheme_location[val]);
 				}
 				var_indexes.clear();
 				for (unsigned int i=0;i < relations[rule.getName()].getScheme().size();i++) {
 					var_indexes.push_back(i);
 				}
-
-				
-
 				temp2 = temp2.project(indexes);
-				//std::cout << temp2.toString() << "\n";
-
 				std::vector<std::string> new_ref = relations[rule.getName()].getScheme();
-				//std::cout << temp2.toString() << "\n";
 				temp2 = temp2.rename(var_indexes, new_ref);
 				
 				any_added = relations[rule.getName()].unions(temp2);
+				if (any_added == true){
+					continue_loop =true;
+				}
 				new_ref.clear();
 			}
 		}
@@ -170,6 +169,7 @@ public:
 				variables.push_back(values.at(val));
 				
 			}
+
 			var_indexes.clear();
 			for (unsigned int i=0; i < variables.size();i++) {
 				var_indexes.push_back(i);

@@ -25,7 +25,7 @@ public:
 			int extraLines = 0;
       TokenType type = UNDEFINED;
       std::string value = "";
-			while (checkNext(' ',0) || checkNext('\t',0) || checkNext('\n', 0)) {
+			while (checkNext(' ',0) || checkNext('\0',0)|| checkNext('\t',0) || checkNext('\n', 0)) {
         if (checkNext('\n', 0)) {
           ++line;
         }

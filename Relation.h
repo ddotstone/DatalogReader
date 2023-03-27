@@ -2,6 +2,7 @@
 
 #include <set>
 #include <unordered_map>
+#include <iostream>
 
 #include "Tuple.h"
 
@@ -132,7 +133,7 @@ public:
       bool any_added = false;
       
       for (auto& tuple : right.tuples) {
-              
+          
           is_added = this->addTuple(tuple);
           if (is_added) {
               std::cout << "  " << tuple.toString(this->scheme) << "\n";

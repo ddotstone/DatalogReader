@@ -118,9 +118,13 @@ public:
   // ruleList	->	rule ruleList | lambda
   std::vector<Rule> ruleList() {
     std::vector<Rule> temp = {};
+	
     while (tokenType() == ID) {
       Rule next = rule();
       temp.push_back(next);
+			while (tokenType() == COMMENT){
+			advanceToken();
+			}
     }
     return temp;
   }
