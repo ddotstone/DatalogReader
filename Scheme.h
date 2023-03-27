@@ -16,4 +16,5 @@ public:
 		}
 		return s.str();
 	}
+
 };

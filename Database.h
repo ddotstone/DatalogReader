@@ -39,6 +39,7 @@ public:
 
 	
 	void processRules(DatalogProgram datalog) {
+		std::cout << "Rule Evaluation" << "\n";
 		std::vector<std::string> values;
 		std::vector<int> indexes;
 		std::vector<int> var_indexes;
@@ -49,9 +50,11 @@ public:
 		Relation temp;
 		Relation temp2;
 		bool any_added = true;
-		
+		int passes = 0;
 		while (any_added) {
+			passes += 1;
 			for (auto& rule : datalog.getRules()) {
+				std::cout << rule.toString() << "\n";
 				rules.clear();
 				for (auto& predicate : rule.getPredicates()) {
 					values = conToString(predicate.getParameters());
@@ -88,45 +91,50 @@ public:
 					temp2 = temp2.rename(var_indexes, variables);
 					rules.push_back(temp2);
 				}
-				temp2 = rules.at(0);
 
+				temp2 = rules.at(0);
 				if (rules.size() > 0) {
 					for (unsigned int i = 1; i < rules.size();i++) {
+						
 						temp2 = temp2.join(rules.at(i));
 					}
 				}
-				std::cout << temp2.toString() << "\n";
+
 				values.clear();
 				values = temp2.getScheme();
 				for (unsigned int i = 0; i < values.size(); i++) {
 					std::string value = values.at(i);
 					transform(value.begin(), value.end(), value.begin(), ::toupper);
-					scheme_location[values.at(i)] = i;
+					scheme_location[value] = i;
 				}
 				indexes.clear();
 				for (auto& val : relations[rule.getName()].getScheme()) {
 					indexes.push_back(scheme_location[val]);
 				}
 				var_indexes.clear();
-				for (unsigned int i;i < relations[rule.getName()].getScheme().size();i++) {
+				for (unsigned int i=0;i < relations[rule.getName()].getScheme().size();i++) {
 					var_indexes.push_back(i);
 				}
+
+				
+
 				temp2 = temp2.project(indexes);
+				//std::cout << temp2.toString() << "\n";
+
 				std::vector<std::string> new_ref = relations[rule.getName()].getScheme();
-				for (auto& val : new_ref) {
-					std::cout << val << "\n";
-				}
-				temp2 = temp2.rename(var_indexes,new_ref);
+				//std::cout << temp2.toString() << "\n";
+				temp2 = temp2.rename(var_indexes, new_ref);
 				
 				any_added = relations[rule.getName()].unions(temp2);
-				
-				
+				new_ref.clear();
 			}
 		}
+		std::cout << "\n" << "Schemes populated after " << passes << " passes through the Rules." << "\n\n";
 	}
 
 	
 	void processQueries(DatalogProgram datalog) {
+		std::cout << "Query Evaluation\n";
 		std::vector<std::string> values;
 		std::vector<int> indexes;
 		std::vector<int> var_indexes;

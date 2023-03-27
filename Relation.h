@@ -37,6 +37,7 @@ public:
         return s.str().substr(0, s.str().size() - 1);
     }
 
+
     Relation select(const std::vector<int>& indexes,
         const std::vector<std::string>& values) const {
         Relation result(this->name, this->scheme);
@@ -129,10 +130,12 @@ public:
   bool unions(const Relation &right) {
       bool is_added;
       bool any_added = false;
+      
       for (auto& tuple : right.tuples) {
               
           is_added = this->addTuple(tuple);
           if (is_added) {
+              std::cout << "  " << tuple.toString(this->scheme) << "\n";
               any_added = true;
           }
       }
@@ -172,11 +175,12 @@ public:
 
         for (const Tuple &rightTuple : right.tuples) {
           if (joinable(right_additions,comparisons, leftTuple, rightTuple)) {
-            for (const std::string& i:leftTuple){
+              temp.clear();
+              for (const std::string& i:leftTuple){
 							temp.push_back(i);
 						}
             for (int &i : right_additions) {
-              temp.push_back(rightTuple.at(i));
+                temp.push_back(rightTuple.at(i));
             }
             result.addTuple(temp);
           }
