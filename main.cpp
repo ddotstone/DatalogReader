@@ -9,7 +9,7 @@
 #include "Scanner.h"
 #include "Database.h"
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
 
     std::ifstream outputFile(argv[1]);
 
@@ -43,6 +43,32 @@ int main(int argc, char* argv[]) {
         std::cout << "Could not open file" << std::endl;
     }
 }
+*/
+int main() {
+    // predicate names for fake rules
+  // first is name for head predicate
+  // second is names for body predicates
+    std::pair<std::string, std::vector<std::string>> ruleNames[] = {
+  { "A", { "B", "C" } },
+    { "B", { "A", "D" } },
+    { "B", { "B" } },
+    { "E", { "F", "G" } },
+    { "E", { "E", "F" } },
+    };
 
+    std::vector<Rule> rules;
+
+    for (auto& rulePair : ruleNames) {
+        std::string headName = rulePair.first;
+        Rule rule = Rule(Predicate(headName));
+        std::vector<std::string> bodyNames = rulePair.second;
+        for (auto& bodyName : bodyNames)
+            rule.addPredicate(Predicate(bodyName));
+        rules.push_back(rule);
+    }
+
+    Graph graph = Database::makeGraph(rules);
+    std::cout << graph.toString();
+}
 
 

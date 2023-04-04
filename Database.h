@@ -7,6 +7,7 @@
 
 #include "Relation.h"
 #include "DatalogProgram.h"
+#include "Graph.h"
 
 class Database {
 private:
@@ -195,4 +196,28 @@ public:
 		}
 		return temp;
 	}
+
+	static Graph makeGraph(const std::vector<Rule>& rules) {
+
+		Graph graph(rules.size());
+		for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
+			Rule fromRule = rules.at(fromID);
+			std::cout << "from rule R" << fromID << ": " << fromRule.toString() << std::endl;
+			std::vector<Predicate> bodyPreds = fromRule.getPredicates();
+			for (auto& bodyPred : bodyPreds) {
+				std::cout << "from body predicate: " << bodyPred.toString() << std::endl;
+				for (unsigned toID = 0; toID < rules.size(); toID++) {
+					Rule toRule = rules.at(toID);
+					std::cout << "to rule R" << toID << ": " << toRule.toString() << std::endl;
+					if (toRule.getHeadPredicate().isEqual(bodyPred)) {
+						std::cout << "dependency found: (R" << fromID << ",R" << toID << ")" << std::endl;
+						graph.addEdge(fromID, toID);
+					}
+				}
+			}
+		}
+		return graph;
+
+	}
+
 };

@@ -44,4 +44,7 @@ Predicate getPredicate(){
   std::string getName() {
       return this->name.getName();
   }
+  Predicate getHeadPredicate() {
+      return this->name;
+  }
 };

@@ -25,6 +25,19 @@ class Predicate{
 			return this->name;
 		}
 
+		bool isEqual(Predicate toCompare) {
+			bool is_equal = true;
+			if ((this->name != toCompare.getName()) || (this->parameters.size() != toCompare.parameters.size())) {
+				is_equal = false;
+			}
+			for (unsigned int i; i < this->parameters.size(); i++) {
+				if (this->parameters.at(i).getValue() != toCompare.parameters.at(i).getValue()) {
+					is_equal = false;
+				}
+			}
+			return is_equal;
+		}
+
 		std::vector<Parameter> getParameters() {
 			return this->parameters;
 		}
@@ -32,10 +45,12 @@ class Predicate{
 		std::string toString(){
 			std::stringstream s;
 			s << name << "(";
-			for(auto &parameter: this->parameters){
-				s << parameter.toString() << ",";
+			if (!parameters.empty()) {
+				for (auto& parameter : this->parameters) {
+					s << parameter.toString() << ",";
+				}
+				s.seekp(-1, s.cur);
 			}
-			s.seekp(-1,s.cur);
 			s<<")";
 			return s.str();
 		}
