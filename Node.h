@@ -1,3 +1,5 @@
+#pragma once
+
 class Node {
 
 private:
@@ -17,4 +19,8 @@ public:
         s << "";
         return s.str().substr(0, s.str().size() - 1);
     }
+    std::set<int> getNodes() const{
+        return this->adjacentNodeIDs;
+    }
+
 };

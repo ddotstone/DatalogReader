@@ -22,7 +22,7 @@ public:
     this->facts = {};
     this->rules = {};
     this->queries = {};
-		this->domains = {};
+	this->domains = {};
   }
 
   std::string toString() {
@@ -87,6 +87,13 @@ public:
 	};
 	std::vector<Rule> getRules() const {
 		return this->rules;
+	}
+	std::vector<Rule> getRulesAt(std::vector<int> indexes) const {
+		std::vector<Rule> rules;
+		for (auto& index : indexes) {
+			rules.push_back(this->rules.at(index));
+		}
+		return rules;
 	}
 
 

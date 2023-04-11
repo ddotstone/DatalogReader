@@ -24,6 +24,19 @@ public:
     return;
   }
 
+  bool isEqual(Rule to_compare) {
+      bool is_equal = true;
+      if (!this->name.isEqual(to_compare.name)) {
+          is_equal = false;
+      }
+      for (unsigned int i = 0; i < this->predicates.size(); i++) {
+          if (!this->predicates.at(i).isEqual(to_compare.predicates.at(i))) {
+              is_equal = false;
+          }
+      }
+      return is_equal;
+  }
+
   std::string toString() {
     std::stringstream s;
     s << name.toString() << " :- ";
